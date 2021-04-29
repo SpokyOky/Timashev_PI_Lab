@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Timashev_PI_Lab.Logic;
 
 namespace Timashev_PI_Lab
 {
@@ -26,6 +27,11 @@ namespace Timashev_PI_Lab
         {
             string connection = Configuration.GetConnectionString("LocalConnection");
             services.AddDbContext<Database>(options => options.UseSqlServer(connection));
+            services.AddTransient<UserLogic>();
+            services.AddTransient<ProductLogic>();
+            services.AddTransient<RecipeLogic>();
+            services.AddTransient<TechCardLogic>();
+            services.AddTransient<ChemElementLogic>();
             services.AddControllersWithViews();
         }
 

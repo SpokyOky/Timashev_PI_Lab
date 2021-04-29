@@ -16,23 +16,32 @@ namespace Timashev_PI_Lab
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductChemElement>().HasKey(of => new { of.PId, of.CEId });
+            modelBuilder.Entity<ProductChemElement>().HasKey(rce => new { rce.PId, rce.CEId });
 
-            modelBuilder.Entity<ProductChemElement>().HasOne(of => of.Product)
-                .WithMany(o => o.ProductChemElements)
-                .HasForeignKey(of => of.PId);
-            modelBuilder.Entity<ProductChemElement>().HasOne(of => of.ChemElement)
-                .WithMany(o => o.ProductChemElements)
-                .HasForeignKey(of => of.CEId);
+            modelBuilder.Entity<ProductChemElement>().HasOne(rce => rce.Product)
+                .WithMany(r => r.ProductChemElements)
+                .HasForeignKey(rce => rce.PId);
+            modelBuilder.Entity<ProductChemElement>().HasOne(rce => rce.ChemElement)
+                .WithMany(ce => ce.ProductChemElements)
+                .HasForeignKey(rce => rce.CEId);
 
-            modelBuilder.Entity<ProductRecipe>().HasKey(fm => new { fm.PId, fm.RId });
+            modelBuilder.Entity<ProductRecipe>().HasKey(pr => new { pr.PId, pr.RId });
 
-            modelBuilder.Entity<ProductRecipe>().HasOne(fm => fm.Product)
-                .WithMany(f => f.ProductRecipes)
-                .HasForeignKey(fm => fm.PId);
-            modelBuilder.Entity<ProductRecipe>().HasOne(fm => fm.Recipe)
-                .WithMany(f => f.ProductRecipes)
-                .HasForeignKey(fm => fm.RId);
+            modelBuilder.Entity<ProductRecipe>().HasOne(pr => pr.Product)
+                .WithMany(p => p.ProductRecipes)
+                .HasForeignKey(pr => pr.PId);
+            modelBuilder.Entity<ProductRecipe>().HasOne(pr => pr.Recipe)
+                .WithMany(r => r.ProductRecipes)
+                .HasForeignKey(pr => pr.RId);
+
+            modelBuilder.Entity<RecipeTechCard>().HasKey(rtc => new { rtc.RId, rtc.TCId });
+
+            modelBuilder.Entity<RecipeTechCard>().HasOne(rtc => rtc.Recipe)
+                .WithMany(r => r.RecipeTechCards)
+                .HasForeignKey(rtc => rtc.RId);
+            modelBuilder.Entity<RecipeTechCard>().HasOne(rtc => rtc.TechCard)
+                .WithMany(tc => tc.RecipeTechCards)
+                .HasForeignKey(rtc => rtc.TCId);
         }
 
         public virtual DbSet<User> Users { set; get; }
@@ -40,6 +49,8 @@ namespace Timashev_PI_Lab
         public virtual DbSet<ChemElement> ChemElements { set; get; }
         public virtual DbSet<Recipe> Recipes { set; get; }
         public virtual DbSet<ProductChemElement> ProductChemElements { set; get; }
+        public virtual DbSet<TechCard> TechCards{ set; get; }
+        public virtual DbSet<RecipeTechCard> RecipeTechCards { set; get; }
         public virtual DbSet<ProductRecipe> ProductRecipes { set; get; }
     }
 }

@@ -12,7 +12,8 @@ namespace Timashev_PI_Lab.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gram = table.Column<decimal>(type: "decimal(12,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,7 +26,8 @@ namespace Timashev_PI_Lab.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gram = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +45,19 @@ namespace Timashev_PI_Lab.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TechCards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TechCards", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,7 +81,7 @@ namespace Timashev_PI_Lab.Migrations
                 {
                     PId = table.Column<int>(type: "int", nullable: false),
                     CEId = table.Column<int>(type: "int", nullable: false),
-                    Percent = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Gram = table.Column<decimal>(type: "decimal(12,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,7 +106,7 @@ namespace Timashev_PI_Lab.Migrations
                 {
                     PId = table.Column<int>(type: "int", nullable: false),
                     RId = table.Column<int>(type: "int", nullable: false),
-                    Percent = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Gram = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,6 +125,30 @@ namespace Timashev_PI_Lab.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RecipeTechCards",
+                columns: table => new
+                {
+                    RId = table.Column<int>(type: "int", nullable: false),
+                    TCId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeTechCards", x => new { x.RId, x.TCId });
+                    table.ForeignKey(
+                        name: "FK_RecipeTechCards_Recipes_RId",
+                        column: x => x.RId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeTechCards_TechCards_TCId",
+                        column: x => x.TCId,
+                        principalTable: "TechCards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ProductChemElements_CEId",
                 table: "ProductChemElements",
@@ -119,6 +158,11 @@ namespace Timashev_PI_Lab.Migrations
                 name: "IX_ProductRecipes_RId",
                 table: "ProductRecipes",
                 column: "RId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeTechCards_TCId",
+                table: "RecipeTechCards",
+                column: "TCId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -128,6 +172,9 @@ namespace Timashev_PI_Lab.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductRecipes");
+
+            migrationBuilder.DropTable(
+                name: "RecipeTechCards");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -140,6 +187,9 @@ namespace Timashev_PI_Lab.Migrations
 
             migrationBuilder.DropTable(
                 name: "Recipes");
+
+            migrationBuilder.DropTable(
+                name: "TechCards");
         }
     }
 }

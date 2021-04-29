@@ -1,0 +1,16 @@
+﻿@model Timashev_PI_Lab.Models.Product
+@{
+    ViewData["Title"] = "RemoveChemElement";
+}
+
+<h1>AddChemEleement</h1>
+
+@using (Html.BeginForm("RemoveChemElement"))
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Name)
+    <p>Хим. Элемент: @Html.DropDownList("chemElementlist", (SelectList)ViewBag.ChemElementsList)</p>
+
+    @Html.ValidationSummary()
+    <p><input type="submit" value="Сохранить" /></p>
+}

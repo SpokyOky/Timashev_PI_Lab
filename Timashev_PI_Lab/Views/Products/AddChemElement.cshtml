@@ -1,0 +1,17 @@
+﻿@model Timashev_PI_Lab.Models.Product
+@{
+    ViewData["Title"] = "AddChemElement";
+}
+
+<h1>AddChemElement</h1>
+
+@using (Html.BeginForm("AddChemElement"))
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Name)
+    <p>Хим. Элемент: @Html.DropDownList("chemElementlist", (SelectList)ViewBag.ChemElementsList)</p>
+    <p>Грамм: <input name="Gramm" type="number" step="0.01"/></p>
+
+    @Html.ValidationSummary()
+    <p><input type="submit" value="Сохранить" /></p>
+}

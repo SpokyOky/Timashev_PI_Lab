@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace Timashev_PI_Lab.Models
 {
-    public class Recipe
+    public class TechCard
     {
         public int? Id { get; set; }
 
         public string Name { get; set; }
-
-        public virtual List<ProductRecipe> ProductRecipes { get; set; }
 
         public virtual List<RecipeTechCard> RecipeTechCards { get; set; }
     }

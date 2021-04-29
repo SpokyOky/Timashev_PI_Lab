@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,7 +8,8 @@ namespace Timashev_PI_Lab.Models
 {
     public class ProductChemElement
     {
-        public string Percent { get; set; }
+        [Column(TypeName = "decimal(12, 2)")]
+        public decimal Gram { get; set; }
 
         public int PId { get; set; }
 

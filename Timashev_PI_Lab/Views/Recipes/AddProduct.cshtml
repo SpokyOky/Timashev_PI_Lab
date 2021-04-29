@@ -1,0 +1,17 @@
+﻿@model Timashev_PI_Lab.Models.Recipe
+@{
+    ViewData["Title"] = "AddProduct";
+}
+
+<h1>AddProduct</h1>
+
+@using (Html.BeginForm("AddProduct"))
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Name)
+    <p>Продукт: @Html.DropDownList("productlist", (SelectList)ViewBag.ProductsList)</p>
+    <p>Грамм: <input name="Gram" type="number" step="0.01"/></p>
+
+    @Html.ValidationSummary()
+    <p><input type="submit" value="Сохранить" /></p>
+}

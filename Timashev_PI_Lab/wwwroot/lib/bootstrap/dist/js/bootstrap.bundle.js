@@ -3548,8 +3548,8 @@
      *
      * It accepts the following units:
      * - `px` or unit-less, interpreted as pixels
-     * - `%` or `%r`, percentage relative to the length of the reference element
-     * - `%p`, percentage relative to the length of the popper element
+     * - `%` or `%r`, gramage relative to the length of the reference element
+     * - `%p`, gramage relative to the length of the popper element
      * - `vw`, CSS viewport width unit
      * - `vh`, CSS viewport height unit
      *
