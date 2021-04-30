@@ -34,7 +34,7 @@ namespace Timashev_PI_Lab.Logic
 
                 tempTechCard.Id = user.Id;
                 tempTechCard.Name = user.Name;
-                tempTechCard.RecipeTechCards = user.RecipeTechCards;
+                tempTechCard.Recipe= user.Recipe;
             }
             else
             {
@@ -66,7 +66,7 @@ namespace Timashev_PI_Lab.Logic
             if (user != null)
             {
                 result.AddRange(context.TechCards
-                    .Include(rec => rec.RecipeTechCards).ThenInclude(rec => rec.Recipe)
+                    .Include(rec => rec.Recipe)
                     .ThenInclude(rec => rec.ProductRecipes).ThenInclude(rec => rec.Product)
                     .ThenInclude(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
                     .Where(rec => (rec.Id == user.Id) || (rec.Name == user.Name))

@@ -13,6 +13,6 @@ namespace Timashev_PI_Lab.Models
 
         public virtual List<ProductRecipe> ProductRecipes { get; set; }
 
-        public virtual List<RecipeTechCard> RecipeTechCards { get; set; }
+        public virtual List<TechCard> TechCards { get; set; }
     }
 }

@@ -48,19 +48,6 @@ namespace Timashev_PI_Lab.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TechCards",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TechCards", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -126,27 +113,23 @@ namespace Timashev_PI_Lab.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeTechCards",
+                name: "TechCards",
                 columns: table => new
                 {
-                    RId = table.Column<int>(type: "int", nullable: false),
-                    TCId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RecipeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeTechCards", x => new { x.RId, x.TCId });
+                    table.PrimaryKey("PK_TechCards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RecipeTechCards_Recipes_RId",
-                        column: x => x.RId,
+                        name: "FK_TechCards_Recipes_RecipeId",
+                        column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecipeTechCards_TechCards_TCId",
-                        column: x => x.TCId,
-                        principalTable: "TechCards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -160,9 +143,9 @@ namespace Timashev_PI_Lab.Migrations
                 column: "RId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecipeTechCards_TCId",
-                table: "RecipeTechCards",
-                column: "TCId");
+                name: "IX_TechCards_RecipeId",
+                table: "TechCards",
+                column: "RecipeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -174,7 +157,7 @@ namespace Timashev_PI_Lab.Migrations
                 name: "ProductRecipes");
 
             migrationBuilder.DropTable(
-                name: "RecipeTechCards");
+                name: "TechCards");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -187,9 +170,6 @@ namespace Timashev_PI_Lab.Migrations
 
             migrationBuilder.DropTable(
                 name: "Recipes");
-
-            migrationBuilder.DropTable(
-                name: "TechCards");
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Timashev_PI_Lab.Logic
                 result.AddRange(context.Products
                     .Include(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
                     .Include(rec => rec.ProductRecipes).ThenInclude(rec => rec.Recipe)
-                    .ThenInclude(rec => rec.RecipeTechCards).ThenInclude(rec => rec.TechCard)
+                    .ThenInclude(rec => rec.TechCards)
                     .Where(rec => (rec.Id == user.Id) || (rec.Name == user.Name))
                     .Select(rec => rec));
             }

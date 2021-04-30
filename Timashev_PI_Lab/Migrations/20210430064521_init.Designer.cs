@@ -10,7 +10,7 @@ using Timashev_PI_Lab;
 namespace Timashev_PI_Lab.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210429232024_init")]
+    [Migration("20210430064521_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,21 +108,6 @@ namespace Timashev_PI_Lab.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Timashev_PI_Lab.Models.RecipeTechCard", b =>
-                {
-                    b.Property<int>("RId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TCId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RId", "TCId");
-
-                    b.HasIndex("TCId");
-
-                    b.ToTable("RecipeTechCards");
-                });
-
             modelBuilder.Entity("Timashev_PI_Lab.Models.TechCard", b =>
                 {
                     b.Property<int?>("Id")
@@ -133,7 +118,12 @@ namespace Timashev_PI_Lab.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("TechCards");
                 });
@@ -197,23 +187,13 @@ namespace Timashev_PI_Lab.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Timashev_PI_Lab.Models.RecipeTechCard", b =>
+            modelBuilder.Entity("Timashev_PI_Lab.Models.TechCard", b =>
                 {
                     b.HasOne("Timashev_PI_Lab.Models.Recipe", "Recipe")
-                        .WithMany("RecipeTechCards")
-                        .HasForeignKey("RId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Timashev_PI_Lab.Models.TechCard", "TechCard")
-                        .WithMany("RecipeTechCards")
-                        .HasForeignKey("TCId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("TechCards")
+                        .HasForeignKey("RecipeId");
 
                     b.Navigation("Recipe");
-
-                    b.Navigation("TechCard");
                 });
 
             modelBuilder.Entity("Timashev_PI_Lab.Models.ChemElement", b =>
@@ -232,12 +212,7 @@ namespace Timashev_PI_Lab.Migrations
                 {
                     b.Navigation("ProductRecipes");
 
-                    b.Navigation("RecipeTechCards");
-                });
-
-            modelBuilder.Entity("Timashev_PI_Lab.Models.TechCard", b =>
-                {
-                    b.Navigation("RecipeTechCards");
+                    b.Navigation("TechCards");
                 });
 #pragma warning restore 612, 618
         }
