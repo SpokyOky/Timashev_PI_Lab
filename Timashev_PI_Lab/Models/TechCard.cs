@@ -11,6 +11,6 @@ namespace Timashev_PI_Lab.Models
 
         public string Name { get; set; }
 
-        public virtual Recipe Recipe{ get; set; }
+        public virtual Recipe Recipe { get; set; }
     }
 }

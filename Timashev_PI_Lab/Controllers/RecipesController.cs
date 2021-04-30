@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Timashev_PI_Lab;
 using Timashev_PI_Lab.Logic;
 using Timashev_PI_Lab.Models;
 

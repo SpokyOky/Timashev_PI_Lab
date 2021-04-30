@@ -22,6 +22,7 @@ namespace Timashev_PI_Lab.Controllers
         public TechCardsController(Database context, TechCardLogic techCardLogic, RecipeLogic recipeLogic, ProductLogic productLogic, ChemElementLogic chemElementLogic)
         {
             _context = context;
+            _chemElementLogic = chemElementLogic;
             _recipeLogic = recipeLogic;
             _productLogic = productLogic;
             _techCardLogic = techCardLogic;
@@ -46,6 +47,35 @@ namespace Timashev_PI_Lab.Controllers
             {
                 return NotFound();
             }
+            Recipe recipe = techCard.Recipe;
+            if (recipe != null)
+            {
+                ViewBag.Recipe = recipe;
+                int sumGram = 0;
+                foreach (var pr in recipe.ProductRecipes)
+                {
+                    sumGram += pr.Gram;
+                }
+
+                ViewBag.SumGram = sumGram;
+
+                Dictionary<ChemElement, decimal> elementsGram = new Dictionary<ChemElement, decimal>();
+                foreach (var pr in recipe.ProductRecipes)
+                {
+                    foreach (var pch in pr.Product.ProductChemElements)
+                    {
+                        if (elementsGram.ContainsKey(pch.ChemElement))
+                        {
+                            elementsGram[pch.ChemElement] += pch.Gram;
+                        }
+                        else
+                        {
+                            elementsGram.Add(pch.ChemElement, pch.Gram);
+                        }
+                    }
+                }
+                ViewBag.ElementsGram = elementsGram;
+            }
 
             return View(techCard);
         }
@@ -53,6 +83,7 @@ namespace Timashev_PI_Lab.Controllers
         // GET: TechCards/Create
         public IActionResult Create()
         {
+            ViewBag.RecipesList = GetRecipes(null);
             return View();
         }
 
@@ -61,8 +92,23 @@ namespace Timashev_PI_Lab.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] TechCard techCard)
+        public async Task<IActionResult> Create([Bind("Id, Name")] TechCard techCard)
         {
+            int recipeId;
+            Recipe recipe = null;
+
+            if (Int32.TryParse(Request.Form["recipelist"].ToString(), out recipeId))
+            {
+                try
+                {
+                    recipe = _recipeLogic.Read(new Recipe
+                    {
+                        Id = recipeId
+                    }).First();
+                    techCard.Recipe = recipe;
+                }
+                catch (Exception) { }
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(techCard);
@@ -104,6 +150,17 @@ namespace Timashev_PI_Lab.Controllers
         private bool TechCardExists(int? id)
         {
             return _context.TechCards.Any(e => e.Id == id);
+        }
+
+        private SelectList GetRecipes(List<Recipe> recipes)
+        {
+            var _recipes = _recipeLogic.Read(null);
+            if (recipes == null)
+            {
+                return new SelectList(_recipes, "Id", "Name");
+            }
+
+            return new SelectList(recipes, "Id", "Name");
         }
     }
 }

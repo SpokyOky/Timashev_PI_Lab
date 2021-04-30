@@ -33,7 +33,6 @@ namespace Timashev_PI_Lab.Logic
                 }
 
                 tempTechCard.Id = user.Id;
-                tempTechCard.Name = user.Name;
                 tempTechCard.Recipe= user.Recipe;
             }
             else
@@ -69,7 +68,7 @@ namespace Timashev_PI_Lab.Logic
                     .Include(rec => rec.Recipe)
                     .ThenInclude(rec => rec.ProductRecipes).ThenInclude(rec => rec.Product)
                     .ThenInclude(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
-                    .Where(rec => (rec.Id == user.Id) || (rec.Name == user.Name))
+                    .Where(rec => (rec.Id == user.Id))
                     .Select(rec => rec));
             }
             else

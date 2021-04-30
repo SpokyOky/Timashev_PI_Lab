@@ -18,6 +18,9 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <p>Рецепт: @Html.DropDownList("recipelist", (SelectList)ViewBag.RecipesList)</p>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
