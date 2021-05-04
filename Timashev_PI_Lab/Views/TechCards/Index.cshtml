@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Timashev_PI_Lab.Models.TechCard>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Тех. карты";
 }
 
-<h1>Index</h1>
+<h1>Тех. карты</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать новую</a>
 </p>
 <table class="table">
     <thead>
@@ -19,14 +19,23 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@if (Model != null)  
+foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Подробно</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a> |
+                @if (item.DeleteMark != null && item.DeleteMark == true)
+                {
+            <a asp-action="UnmarkDelete" asp-route-id="@item.Id">Удалить пометку</a>
+                }
+                else
+                {
+            <a asp-action="MarkDelete" asp-route-id="@item.Id">Пометить на удаление</a>
+                }
             </td>
         </tr>
 }

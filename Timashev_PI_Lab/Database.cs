@@ -2,6 +2,7 @@
 using System.Linq;
 using Timashev_PI_Lab.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Timashev_PI_Lab
 {
@@ -10,8 +11,8 @@ namespace Timashev_PI_Lab
         public Database(DbContextOptions<Database> options)
                    : base(options)
         {
-            //SampleData.Initialize(this);
-            // Database.EnsureCreated();
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,6 +34,29 @@ namespace Timashev_PI_Lab
             modelBuilder.Entity<ProductRecipe>().HasOne(pr => pr.Recipe)
                 .WithMany(r => r.ProductRecipes)
                 .HasForeignKey(pr => pr.RId);
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 0,
+                    FIO = "admin",
+                    Login = "admin",
+                    Password = "admin"
+                });
+            modelBuilder.Entity<ChemElement>().HasData(
+                new ChemElement[]
+                {
+                    new ChemElement{ Id = 0, Name = "Б" },
+                    new ChemElement{ Id = 1, Name = "Ж" },
+                    new ChemElement{ Id = 2, Name = "У" },
+                    new ChemElement{ Id = 3, Name = "B1" },
+                    new ChemElement{ Id = 4, Name = "C" },
+                    new ChemElement{ Id = 5, Name = "A" },
+                    new ChemElement{ Id = 6, Name = "E" },
+                    new ChemElement{ Id = 7, Name = "Ca" },
+                    new ChemElement{ Id = 8, Name = "P" },
+                    new ChemElement{ Id = 9, Name = "Mg" }
+                });
         }
 
         public virtual DbSet<User> Users { set; get; }

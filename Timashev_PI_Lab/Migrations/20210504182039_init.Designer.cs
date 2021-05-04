@@ -10,7 +10,7 @@ using Timashev_PI_Lab;
 namespace Timashev_PI_Lab.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20210430064521_init")]
+    [Migration("20210504182039_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,68 @@ namespace Timashev_PI_Lab.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChemElements");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 0,
+                            Gram = 0m,
+                            Name = "Б"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Gram = 0m,
+                            Name = "Ж"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Gram = 0m,
+                            Name = "У"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Gram = 0m,
+                            Name = "B1"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Gram = 0m,
+                            Name = "C"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Gram = 0m,
+                            Name = "A"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Gram = 0m,
+                            Name = "E"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Gram = 0m,
+                            Name = "Ca"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Gram = 0m,
+                            Name = "P"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Gram = 0m,
+                            Name = "Mg"
+                        });
                 });
 
             modelBuilder.Entity("Timashev_PI_Lab.Models.Product", b =>
@@ -45,6 +107,9 @@ namespace Timashev_PI_Lab.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool?>("DeleteMark")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Gram")
                         .HasColumnType("int");
@@ -100,7 +165,16 @@ namespace Timashev_PI_Lab.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool?>("DeleteMark")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HowToCook")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Quality")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -114,6 +188,9 @@ namespace Timashev_PI_Lab.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool?>("DeleteMark")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -147,6 +224,15 @@ namespace Timashev_PI_Lab.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 0,
+                            FIO = "admin",
+                            Login = "admin",
+                            Password = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Timashev_PI_Lab.Models.ProductChemElement", b =>

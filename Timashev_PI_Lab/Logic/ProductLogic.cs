@@ -16,38 +16,43 @@ namespace Timashev_PI_Lab.Logic
             context = _context;
         }
 
-        public void CreateOrUpdate(Product user)
+        public void CreateOrUpdate(Product product)
         {
-            Product tempProduct = user.Id.HasValue ? null : new Product();
+            Product tempProduct = product.Id.HasValue ? null : new Product();
 
-            if (user.Id.HasValue)
+            if (product.Id.HasValue)
             {
-                tempProduct = context.Products.FirstOrDefault(rec => rec.Id == user.Id);
+                tempProduct = context.Products.FirstOrDefault(rec => rec.Id == product.Id);
             }
 
-            if (user.Id.HasValue)
+            if (product.Id.HasValue)
             {
                 if (tempProduct == null)
                 {
                     throw new Exception("Элемент не найден");
                 }
-
-                tempProduct.Id = user.Id;
-                tempProduct.Name = user.Name;
-                tempProduct.ProductChemElements = user.ProductChemElements;
-                tempProduct.ProductRecipes = user.ProductRecipes;
+                if (product.DeleteMark != null)
+                {
+                    tempProduct.DeleteMark = product.DeleteMark;
+                } else
+                {
+                    tempProduct.Id = product.Id;
+                    tempProduct.Name = product.Name;
+                    tempProduct.ProductChemElements = product.ProductChemElements;
+                    tempProduct.ProductRecipes = product.ProductRecipes;
+                }
             }
             else
             {
-                context.Products.Add(user);
+                context.Products.Add(product);
             }
 
             context.SaveChanges();
         }
 
-        public void Delete(Product user)
+        public void Delete(Product product)
         {
-            Product element = context.Products.FirstOrDefault(rec => rec.Id == user.Id.Value);
+            Product element = context.Products.FirstOrDefault(rec => rec.Id == product.Id.Value);
 
             if (element != null)
             {
@@ -60,17 +65,26 @@ namespace Timashev_PI_Lab.Logic
             }
         }
 
-        public List<Product> Read(Product user)
+        public List<Product> Read(Product product)
         {
             List<Product> result = new List<Product>();
-
-            if (user != null)
+            if (product != null)
             {
+                if (product.DeleteMark != null)
+                {
+                    result.AddRange(context.Products
+                    .Include(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
+                    .Include(rec => rec.ProductRecipes).ThenInclude(rec => rec.Recipe)
+                    .ThenInclude(rec => rec.TechCards)
+                    .Where(rec => rec.DeleteMark == product.DeleteMark)
+                    .Select(rec => rec));
+                    return result;
+                }
                 result.AddRange(context.Products
                     .Include(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
                     .Include(rec => rec.ProductRecipes).ThenInclude(rec => rec.Recipe)
                     .ThenInclude(rec => rec.TechCards)
-                    .Where(rec => (rec.Id == user.Id) || (rec.Name == user.Name))
+                    .Where(rec => (rec.Id == product.Id) || (rec.Name == product.Name))
                     .Select(rec => rec));
             }
             else

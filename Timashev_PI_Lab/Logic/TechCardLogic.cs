@@ -16,36 +16,43 @@ namespace Timashev_PI_Lab.Logic
             context = _context;
         }
 
-        public void CreateOrUpdate(TechCard user)
+        public void CreateOrUpdate(TechCard techCard)
         {
-            TechCard tempTechCard = user.Id.HasValue ? null : new TechCard();
+            TechCard tempTechCard = techCard.Id.HasValue ? null : new TechCard();
 
-            if (user.Id.HasValue)
+            if (techCard.Id.HasValue)
             {
-                tempTechCard = context.TechCards.FirstOrDefault(rec => rec.Id == user.Id);
+                tempTechCard = context.TechCards.FirstOrDefault(rec => rec.Id == techCard.Id);
             }
 
-            if (user.Id.HasValue)
+            if (techCard.Id.HasValue)
             {
                 if (tempTechCard == null)
                 {
                     throw new Exception("Элемент не найден");
                 }
 
-                tempTechCard.Id = user.Id;
-                tempTechCard.Recipe= user.Recipe;
+                if (techCard.DeleteMark != null)
+                {
+                    tempTechCard.DeleteMark = techCard.DeleteMark;
+                }
+                else
+                {
+                    tempTechCard.Id = techCard.Id;
+                    tempTechCard.Recipe = techCard.Recipe;
+                }
             }
             else
             {
-                context.TechCards.Add(user);
+                context.TechCards.Add(techCard);
             }
 
             context.SaveChanges();
         }
 
-        public void Delete(TechCard user)
+        public void Delete(TechCard techCard)
         {
-            TechCard element = context.TechCards.FirstOrDefault(rec => rec.Id == user.Id.Value);
+            TechCard element = context.TechCards.FirstOrDefault(rec => rec.Id == techCard.Id.Value);
 
             if (element != null)
             {
@@ -58,17 +65,27 @@ namespace Timashev_PI_Lab.Logic
             }
         }
 
-        public List<TechCard> Read(TechCard user)
+        public List<TechCard> Read(TechCard techCard)
         {
             List<TechCard> result = new List<TechCard>();
 
-            if (user != null)
+            if (techCard != null)
             {
+                if (techCard.DeleteMark != null)
+                {
+                    result.AddRange(context.TechCards
+                   .Include(rec => rec.Recipe)
+                   .ThenInclude(rec => rec.ProductRecipes).ThenInclude(rec => rec.Product)
+                   .ThenInclude(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
+                   .Where(rec => rec.DeleteMark == techCard.DeleteMark)
+                   .Select(rec => rec));
+                    return result;
+                }
                 result.AddRange(context.TechCards
                     .Include(rec => rec.Recipe)
                     .ThenInclude(rec => rec.ProductRecipes).ThenInclude(rec => rec.Product)
                     .ThenInclude(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
-                    .Where(rec => (rec.Id == user.Id))
+                    .Where(rec => (rec.Id == techCard.Id))
                     .Select(rec => rec));
             }
             else

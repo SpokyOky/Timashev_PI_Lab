@@ -47,6 +47,18 @@ namespace Timashev_PI_Lab.Controllers
             return View(recipe);
         }
 
+        public IActionResult UnmarkDelete(int? id)
+        {
+            _recipeLogic.CreateOrUpdate(new Recipe { Id = id, DeleteMark = false });
+            return RedirectToAction("Index", "Recipes");
+        }
+
+        public IActionResult MarkDelete(int? id)
+        {
+            _recipeLogic.CreateOrUpdate(new Recipe { Id = id, DeleteMark = true });
+            return RedirectToAction("Index", "Recipes");
+        }
+
         // GET: Recipes/Create
         public IActionResult Create()
         {
@@ -58,11 +70,11 @@ namespace Timashev_PI_Lab.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Recipe recipe)
+        public async Task<IActionResult> Create([Bind("Id,Name,HowToCook,Quality")] Recipe recipe)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(recipe);
+                _recipeLogic.CreateOrUpdate(recipe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -91,7 +103,7 @@ namespace Timashev_PI_Lab.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,Name")] Recipe recipe)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,Name,HowToCook,Quality")] Recipe recipe)
         {
             if (id != recipe.Id)
             {
@@ -102,7 +114,7 @@ namespace Timashev_PI_Lab.Controllers
             {
                 try
                 {
-                    _context.Update(recipe);
+                    _recipeLogic.CreateOrUpdate(recipe);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -159,6 +171,11 @@ namespace Timashev_PI_Lab.Controllers
         public IActionResult AddProduct(int id)
         {
             var recipe = _recipeLogic.Read(new Recipe { Id = id }).First();
+            if (recipe.ProductRecipes.Count() >= 15)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             var products = GetProducts(recipe, true);
             ViewBag.ProductsList = products;
             return View("AddProduct", recipe);

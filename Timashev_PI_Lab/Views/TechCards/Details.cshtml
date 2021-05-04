@@ -1,17 +1,17 @@
 ﻿@model Timashev_PI_Lab.Models.TechCard
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробно";
 }
 
-<h1>Details</h1>
+<h1>Подробно</h1>
 
 <div>
-    <h4>TechCard</h4>
+    <h4>Тех. карта</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            Recipe @Html.DisplayNameFor(model => model.Recipe.Name)
+            Recipe 
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Recipe.Name)
@@ -38,7 +38,7 @@
     @foreach (ProductRecipe pr in ViewBag.Recipe.ProductRecipes)
     {
         <tr>
-            <td>@pr.Recipe.Name</td>
+            <td>@pr.Product.Name</td>
             <td>@pr.Gram</td>
             <td>@pr.Gram</td>
             <td>@(pr.Gram * 100)</td>
@@ -71,6 +71,24 @@
         }
     </tr>
 </table>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Recipe.HowToCook)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Recipe.HowToCook)
+    </dd>
+</dl>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Recipe.Quality)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Recipe.Quality)
+    </dd>
+</dl>
+<h5>Утверждено: ____________________________________________ @Program.Director</h5>
+<h5>@Program.Organization</h5>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад</a>
 </div>

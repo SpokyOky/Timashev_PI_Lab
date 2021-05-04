@@ -30,6 +30,7 @@ namespace Timashev_PI_Lab.Controllers
             return View(await _context.Products.ToListAsync());
         }
 
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -46,6 +47,18 @@ namespace Timashev_PI_Lab.Controllers
 
             ViewBag.ChemElementsList = GetChemElements(product);
             return View(product);
+        }
+
+        public IActionResult UnmarkDelete(int? id)
+        {
+            _productLogic.CreateOrUpdate(new Product { Id = id, DeleteMark = false });
+            return RedirectToAction("Index", "Products");
+        }
+
+        public IActionResult MarkDelete(int? id)
+        {
+            _productLogic.CreateOrUpdate(new Product { Id = id, DeleteMark = true });
+            return RedirectToAction("Index", "Products");
         }
 
         // GET: Products/Create

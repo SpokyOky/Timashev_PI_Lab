@@ -1,12 +1,12 @@
 ﻿@model Timashev_PI_Lab.Models.Recipe
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создание рецепта";
 }
 
-<h1>Create</h1>
+<h1>Создание рецепта</h1>
 
-<h4>Recipe</h4>
+<h4>Рецепт</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,13 +18,23 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="HowToCook" class="control-label"></label>
+                <input asp-for="HowToCook" class="form-control" />
+                <span asp-validation-for="HowToCook" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quality" class="control-label"></label>
+                <input asp-for="Quality" class="form-control" />
+                <span asp-validation-for="Quality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад</a>
 </div>
 

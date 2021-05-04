@@ -80,6 +80,18 @@ namespace Timashev_PI_Lab.Controllers
             return View(techCard);
         }
 
+        public IActionResult UnmarkDelete(int? id)
+        {
+            _techCardLogic.CreateOrUpdate(new TechCard { Id = id, DeleteMark = false });
+            return RedirectToAction("Index", "TechCards");
+        }
+
+        public IActionResult MarkDelete(int? id)
+        {
+            _techCardLogic.CreateOrUpdate(new TechCard { Id = id, DeleteMark = true });
+            return RedirectToAction("Index", "TechCards");
+        }
+
         // GET: TechCards/Create
         public IActionResult Create()
         {
@@ -112,6 +124,7 @@ namespace Timashev_PI_Lab.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(techCard);
+               //Program.newTechCards.Add(techCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

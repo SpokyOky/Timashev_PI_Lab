@@ -16,37 +16,53 @@ namespace Timashev_PI_Lab.Logic
             context = _context;
         }
 
-        public void CreateOrUpdate(Recipe user)
+        public void CreateOrUpdate(Recipe recipe)
         {
-            Recipe tempRecipe = user.Id.HasValue ? null : new Recipe();
+            Recipe tempRecipe = recipe.Id.HasValue ? null : new Recipe();
 
-            if (user.Id.HasValue)
+            if (recipe.Id.HasValue)
             {
-                tempRecipe = context.Recipes.FirstOrDefault(rec => rec.Id == user.Id);
+                tempRecipe = context.Recipes.FirstOrDefault(rec => rec.Id == recipe.Id);
             }
 
-            if (user.Id.HasValue)
+            if (recipe.Id.HasValue)
             {
                 if (tempRecipe == null)
                 {
                     throw new Exception("Элемент не найден");
                 }
 
-                tempRecipe.Id = user.Id;
-                tempRecipe.Name = user.Name;
-                tempRecipe.ProductRecipes = user.ProductRecipes;
+                if (recipe.DeleteMark != null)
+                {
+                    tempRecipe.DeleteMark = recipe.DeleteMark;
+                }
+                else
+                {
+                    if (recipe.HowToCook != null)
+                    {
+                        tempRecipe.HowToCook = recipe.HowToCook;
+                    }
+                    if (recipe.Quality != null)
+                    {
+                        tempRecipe.Quality = recipe.Quality;
+                    }
+
+                    tempRecipe.Id = recipe.Id;
+                    tempRecipe.Name = recipe.Name;
+                    tempRecipe.ProductRecipes = recipe.ProductRecipes;
+                }
             }
             else
             {
-                context.Recipes.Add(user);
+                context.Recipes.Add(recipe);
             }
 
             context.SaveChanges();
         }
 
-        public void Delete(Recipe user)
+        public void Delete(Recipe recipe)
         {
-            Recipe element = context.Recipes.FirstOrDefault(rec => rec.Id == user.Id.Value);
+            Recipe element = context.Recipes.FirstOrDefault(rec => rec.Id == recipe.Id.Value);
 
             if (element != null)
             {
@@ -59,17 +75,27 @@ namespace Timashev_PI_Lab.Logic
             }
         }
 
-        public List<Recipe> Read(Recipe user)
+        public List<Recipe> Read(Recipe recipe)
         {
             List<Recipe> result = new List<Recipe>();
 
-            if (user != null)
+            if (recipe != null)
             {
+                if (recipe.DeleteMark != null)
+                {
+                    result.AddRange(context.Recipes
+                       .Include(rec => rec.ProductRecipes).ThenInclude(rec => rec.Product)
+                       .ThenInclude(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
+                       .Include(rec => rec.TechCards)
+                       .Where(rec => rec.DeleteMark == recipe.DeleteMark)
+                       .Select(rec => rec));
+                    return result;
+                }
                 result.AddRange(context.Recipes
                     .Include(rec => rec.ProductRecipes).ThenInclude(rec => rec.Product)
                     .ThenInclude(rec => rec.ProductChemElements).ThenInclude(rec => rec.ChemElement)
                     .Include(rec => rec.TechCards)
-                    .Where(rec => (rec.Id == user.Id) || (rec.Name == user.Name))
+                    .Where(rec => (rec.Id == recipe.Id) || (rec.Name == recipe.Name))
                     .Select(rec => rec));
             }
             else

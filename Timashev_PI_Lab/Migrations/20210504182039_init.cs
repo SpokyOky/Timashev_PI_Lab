@@ -27,7 +27,8 @@ namespace Timashev_PI_Lab.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gram = table.Column<int>(type: "int", nullable: false)
+                    Gram = table.Column<int>(type: "int", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,7 +41,10 @@ namespace Timashev_PI_Lab.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HowToCook = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quality = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeleteMark = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,6 +123,7 @@ namespace Timashev_PI_Lab.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeleteMark = table.Column<bool>(type: "bit", nullable: true),
                     RecipeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -129,8 +134,30 @@ namespace Timashev_PI_Lab.Migrations
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "ChemElements",
+                columns: new[] { "Id", "Gram", "Name" },
+                values: new object[,]
+                {
+                    { 0, 0m, "Б" },
+                    { 1, 0m, "Ж" },
+                    { 2, 0m, "У" },
+                    { 3, 0m, "B1" },
+                    { 4, 0m, "C" },
+                    { 5, 0m, "A" },
+                    { 6, 0m, "E" },
+                    { 7, 0m, "Ca" },
+                    { 8, 0m, "P" },
+                    { 9, 0m, "Mg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "FIO", "Login", "Password" },
+                values: new object[] { 0, "admin", "admin", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductChemElements_CEId",
