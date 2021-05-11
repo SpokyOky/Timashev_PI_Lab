@@ -76,6 +76,11 @@ namespace Timashev_PI_Lab.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(product.Name))
+                {
+                    ModelState.AddModelError("Error", "Введите название");
+                    return View(product);
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -117,6 +122,12 @@ namespace Timashev_PI_Lab.Controllers
             {
                 try
                 {
+                    if (string.IsNullOrWhiteSpace(product.Name))
+                    {
+                        ModelState.AddModelError("Error", "Введите название");
+                        ViewBag.ChemElementsList = GetChemElements(product);
+                        return View(product);
+                    }
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }

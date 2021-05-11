@@ -15,13 +15,22 @@ namespace Timashev_PI_Lab.Logic
             context = _context;
         }
 
-        public void CreateOrUpdate(User user)
+        public bool CreateOrUpdate(User user)
         {
             User tempUser = user.Id.HasValue ? null : new User();
 
             if (user.Id.HasValue)
             {
                 tempUser = context.Users.FirstOrDefault(rec => rec.Id == user.Id);
+
+            }
+            List<User> result = new List<User>();
+            result.AddRange(context.Users
+                .Where(rec => rec.Login == user.Login)
+                .Select(rec => rec));
+            if (result.Count > 0)
+            {
+                return false;
             }
 
             if (user.Id.HasValue)
@@ -42,6 +51,7 @@ namespace Timashev_PI_Lab.Logic
             }
 
             context.SaveChanges();
+            return true;
         }
 
         public void Delete(User user)

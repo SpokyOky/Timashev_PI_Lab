@@ -74,6 +74,11 @@ namespace Timashev_PI_Lab.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(recipe.Name))
+                {
+                    ModelState.AddModelError("Error", "Введите название");
+                    return View(recipe);
+                }
                 _recipeLogic.CreateOrUpdate(recipe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -114,6 +119,12 @@ namespace Timashev_PI_Lab.Controllers
             {
                 try
                 {
+                    if (string.IsNullOrWhiteSpace(recipe.Name))
+                    {
+                        ModelState.AddModelError("Error", "Введите название");
+                        ViewBag.ProductsList = GetProducts(recipe);
+                        return View(recipe);
+                    }
                     _recipeLogic.CreateOrUpdate(recipe);
                     await _context.SaveChangesAsync();
                 }

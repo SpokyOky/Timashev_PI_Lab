@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Timashev_PI_Lab;
+using Timashev_PI_Lab.Logic;
 using Timashev_PI_Lab.Models;
 
 namespace Timashev_PI_Lab.Controllers
@@ -13,10 +14,11 @@ namespace Timashev_PI_Lab.Controllers
     public class UsersController : Controller
     {
         private readonly Database _context;
+        private UserLogic _userLogic;
 
-        public UsersController(Database context)
+        public UsersController(UserLogic userLogic)
         {
-            _context = context;
+            _userLogic = userLogic;
         }
 
         // GET: Users/Create
@@ -34,9 +36,14 @@ namespace Timashev_PI_Lab.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                if (!_userLogic.CreateOrUpdate(user))
+                {
+                    ModelState.AddModelError("Error", "Такой пользователь уже существует");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return View(user);
         }

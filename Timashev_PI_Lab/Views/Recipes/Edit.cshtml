@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" maxlength="50" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,6 +40,12 @@
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"].Errors.Count > 0)
+            {
+                <div class="alert alert-
+                   <strong>Ошибка!</strong> danger">@ViewData.ModelState["Error"].Errors.First().ErrorMessage
+                </div>
+            }
         </form>
     </div>
 </div>

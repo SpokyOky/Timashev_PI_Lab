@@ -1,12 +1,12 @@
 ﻿@model Timashev_PI_Lab.Models.User
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать пользователя";
 }
 
-<h1>Create</h1>
+<h1>Создать пользователя</h1>
 
-<h4>User</h4>
+<h4>Пользователь</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -28,8 +28,14 @@
                 <span asp-validation-for="FIO" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"].Errors.Count > 0)
+            {
+                <div class="alert alert-
+                   <strong>Ошибка!</strong> danger">@ViewData.ModelState["Error"].Errors.First().ErrorMessage
+                </div>
+            }
         </form>
     </div>
 </div>
