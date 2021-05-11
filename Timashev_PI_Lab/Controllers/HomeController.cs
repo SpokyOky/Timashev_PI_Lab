@@ -25,6 +25,11 @@ namespace Timashev_PI_Lab.Controllers
             _techCardLogic = techCardLogic;
         }
 
+        public IActionResult About()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             if (Program.User != null)

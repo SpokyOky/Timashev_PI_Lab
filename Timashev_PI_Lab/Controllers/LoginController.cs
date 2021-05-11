@@ -25,7 +25,7 @@ namespace Timashev_PI_Lab.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var _user = _userLogic.Read(null).FirstOrDefault();
+            var _user = _userLogic.Read(user).FirstOrDefault();
 
             if (_user == null)
             {
